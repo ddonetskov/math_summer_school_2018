@@ -1,0 +1,53 @@
+\begin{figure}
+  \begin{center}
+  \begin{tikzpicture}
+  \begin{axis}[
+      % only scale the axis, not the axis including the ticks and labels
+      scale only axis=true,
+      % set `width' and `height' to the desired values
+      width=12cm,
+      height=6cm,
+      xlabel = $y$,
+      ylabel = $F_Y(y)$,
+      xmin=-2, xmax=2,
+      ymin=-0.2, ymax=1.2,
+      %xtick={0,10,20,30,40,50,60}, 
+      ytick={0,0.5,1},
+      xmajorgrids=true,
+      ymajorgrids=true,
+      %grid style=dashed,
+      %axis on top
+    ]
+    \addplot [
+        domain=-2:-1, 
+        samples=2, 
+        color=red,
+        line width=1pt
+    ] {0};
+    \addplot [
+        %name path=L1,
+        domain=-1:0, 
+        samples=100, 
+        color=red,
+        line width=1pt
+    ] {0.5 + (asin(x)/180*pi)/pi};
+    \addplot [
+        %name path=L2,
+        domain=0:1, 
+        samples=100, 
+        color=red,
+        line width=1pt
+    ] {{0.5 + (asin(x)/180*pi)/pi}};
+    \addplot [
+        domain=1:2, 
+        samples=2, 
+        color=red,
+        line width=1pt
+    ] {1};
+    \addlegendentry{$F_Y(y)$}
+  \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \caption{Функция распределения $Y$}
+  \label{fig:task1}
+\end{figure}
