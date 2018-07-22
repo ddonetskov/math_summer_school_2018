@@ -1,1 +1,1 @@
-# math_summer_school_2018
+This project contains my works for the 'Math for Data Analysis' summer school (2018) ([link](https://cs.hse.ru/dpo/mathfordata)).
