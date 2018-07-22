@@ -1,0 +1,291 @@
+% !TEX TS-program = lualatex
+
+% required for TexXstudio, an alternative is to change the default bibliography tool 
+% in TeXstudio settings (Options > Configure TeXstudio > Build > Default Bibliography Tool)
+% !BIB TS-program = biber
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=20.00mm, right=15.00mm, top=20.00mm, bottom=20.00mm}
+
+% this is to get rid of 'Overfull \hbox...' errors
+\usepackage{microtype}
+
+% ------------------------------------------------------------------------------
+% Title
+% ------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}Теория вероятностей и математическая статистика \\
+Домашнее задание №2}
+\author{Дмитрий Донецков (ddonetskov@gmail.com)}
+\date{\today}
+
+% ------------------------------------------------------------------------------
+% LUA
+% ------------------------------------------------------------------------------
+
+% \usepackage{luacode}
+
+% ------------------------------------------------------------------------------
+% Graphics
+% ------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+
+% https://www.sharelatex.com/learn/Pgfplots_package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}\usepgfplotslibrary{fillbetween}
+
+\usepackage{wrapfig}
+
+% ------------------------------------------------------------------------------
+% Figures
+% ------------------------------------------------------------------------------
+
+\usepackage{subcaption}         % subcaptions in figures
+
+% ------------------------------------------------------------------------------
+% Tables
+% ------------------------------------------------------------------------------
+
+\usepackage{multirow}           % spanning columns across multiple rows
+\usepackage{makecell}           % allows different formats inside cells
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+% ------------------------------------------------------------------------------
+% Math (Additional Support)
+% ------------------------------------------------------------------------------
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}     % AMS
+\usepackage{cancel}             % four different modes of striking through
+\usepackage{dsfont}
+\usepackage{icomma}             % Smart comma: $0,2$ --- число, $0, 2$ --- перечисление
+\usepackage{nicefrac}
+\usepackage{physics}            % implementation of \abs and \norm
+
+\DeclareMathOperator*{\D}{\mathbb{D}}   % the dispersion symbol
+\DeclareMathOperator*{\E}{\mathbb{E}}   % the expectation symbol
+\DeclareMathOperator*{\N}{\mathbb{N}}   % the set of natural numbers
+\DeclareMathOperator*{\R}{\mathbb{R}}   % the set of real numbers
+\DeclareMathOperator*{\Z}{\mathbb{Z}}   % the set of integers
+
+% ------------------------------------------------------------------------------
+% Russian Language (support thereof)
+% ------------------------------------------------------------------------------
+
+\usepackage[russian,english]{babel}	    % локализация и переносы
+
+% ------------------------------------------------------------------------------
+% Fonts 
+% ------------------------------------------------------------------------------
+
+\usepackage{fontspec}           % required to load Open Type, True Type fonts
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+%\setmainfont{Linux Libertine O} % Libertine covers Latin, Hebrew, Greek, and Russian
+%\setmonofont{Courier New}
+
+\usepackage{euscript}	          % Шрифт Евклид
+\usepackage{mathrsfs}           % Красивый матшрифт
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% ------------------------------------------------------------------------------
+
+% Removed as it was not required.
+
+% ------------------------------------------------------------------------------
+% Bookmarking, citing, URL's
+% ------------------------------------------------------------------------------
+
+% hyperref usually needs to be loaded last
+\usepackage{hyperref}
+\usepackage{url}
+% \usepackage[dvipsnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=red,      
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\maketitle
+
+\section{Вопросы}
+
+\subsection{Вопрос 1}
+
+Плотность распределения случайной величины определяется такой функцией (называемой функцией плотности распределения), которая удовлетворяет следующим условиям:
+
+\begin{itemize}
+\item $f(x) \geq 0, x \in \R$,
+\item $\int_{-\infty}^{+\infty}f(x)dx = 1$.
+\end{itemize}
+
+\subsection{Вопрос 2}
+
+Функция $F(x)$ не является функцией распределения, так как она не растёт монотонно на области определения, что противоречит её определению. Так, для данной функции $P(X \leq 0) > P(X \leq 1)$, что некорректно.
+
+\subsection{Вопрос 3}
+
+Да, могут, теория вероятностей не накладывает ограничения по уникальности распределений для случайных величин. Пример: случайные величины $X$, $Y$ - выпавшие значения кубиков 1 и 2, соответственно. У них будут одинаковые распределения (таблицы распределений), при этом это две разные случайные величины.
+
+\section{Задачи}
+
+\subsection{Задача 1}
+
+Воспользуемся свойством функции плотности распределения:
+
+\begin{align*}
+\int_{-\infty}^{+\infty}f(x)dx = 1 
+\Rightarrow 
+\int_{1}^{+\infty}\frac{C}{x^4}dx = 1
+\Rightarrow 
+\lim_{x' \rightarrow +\infty} \int_{1}^{x'}Cx^{-4}dx = 1.
+\end{align*}
+
+Первообразная для подынтегральной функции $F(x) = -C\frac{1}{3}x^{-3} + 1$. Тогда
+
+\begin{align*}
+\lim_{x' \rightarrow +\infty} \int_{1}^{x'}Cx^{-4}dx = 1
+& \Rightarrow 
+\lim_{x' \rightarrow +\infty} F(x') - F(1) = 1
+\Rightarrow 
+-C\frac{1}{3} \lim_{x \rightarrow +\infty} x^{-3} - -C\frac{1}{3} = 1
+\Rightarrow 
+\boxed{C = 3} \\
+& \Rightarrow 
+f(x) = 
+\begin{cases}
+  0 & , \text{if}\ x < 1 \\
+  3x^{-4} & , \text{if}\ x \geq 1
+\end{cases}
+\ \ \
+F(x) = 
+\begin{cases}
+  0 & , \text{if}\ x < 1 \\
+  1-x^{-3} & , \text{if}\ x \geq 1
+\end{cases}
+\end{align*}
+
+\begin{align*}
+P(X<3) = P(1 < X < 3) = \int_{1}^{3}f(x)dx = F(x)\rvert_1^3 = -x^{-3} \rvert_1^3 
+= -\frac{1}{3^3} - -1 = \boxed{\frac{26}{27}}.
+\end{align*}
+
+\begin{align*}
+P(X>7) = \int_{7}^{+\infty}f(x)dx = \lim_{x \Rightarrow +\infty} F(x) - F(7) = 0 - -\frac{1}{7^3} = \boxed{\frac{1}{343}}.
+\end{align*}
+
+
+\subsection{Задача 2}
+
+Обозначим: 
+
+\begin{itemize}
+\item $X$ - количество страховых случаев,
+\item $n$ = 40000 - количество договоров,
+\item $p$ = 0.02 - вероятность страхового случая.
+\end{itemize}
+
+При заданных условиях $X \sim Bin(n, p)$ ($X$ распределена согласно биномиальному распределению).
+
+Воспользуемся теоремой Муавра-Лапласа для подсчёта $P(X \leq 870)$, т.к. для подсчёта по биномиальным коэффициентам придётся считать очень большой ряд, а заданные параметры (большое $n$) позволяют воспользоваться теоремой. Тогда:
+
+\begin{align*}
+\E[X] & = np \Rightarrow \mu = 800, \\
+\D[X] & = npq \Rightarrow \sigma^2 = 784.
+\end{align*}
+
+Искомая вероятность:
+
+\begin{align*}
+P(X \leq 870) = P(\frac{X - 800}{\sqrt{784}} \leq \frac{870 - 800}{\sqrt{784}})
+= P(\frac{X - 800}{28} \leq 2.5) = F_0(2.5) = .99379.
+\end{align*}
+
+\subsection{Задача 3}
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+  \begin{center}
+  \begin{tikzpicture}
+  \begin{axis}[
+      % only scale the axis, not the axis including the ticks and labels
+      scale only axis=true,
+      % set `width' and `height' to the desired values
+      width=6cm,
+      height=6cm,
+      xlabel = $\text{Время появления}\ A$,
+      ylabel = $\text{Время появления}\ B$,
+      xmin=0, xmax=60,
+      ymin=0, ymax=60,
+      xtick={0,10,20,30,40,50,60}, 
+      ytick={0,10,20,30,40,50,60},
+      xmajorgrids=true,
+      ymajorgrids=true,
+      grid style=dashed,
+      axis on top
+    ]
+    \addplot [
+        name path=L1,
+        domain=0:60, 
+        samples=2, 
+        color=red,
+        line width=1pt
+    ] {x + 20};
+    \addplot [
+        name path=L2,
+        domain=0:60, 
+        samples=2, 
+        color=red,
+        line width=1pt
+    ] {x - 20};
+    \addplot [yellow!50] fill between [of=L1 and L2];
+    \node at (axis cs:30,30) {$S$};
+  \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \caption{Интервалы встречи A и B}
+  \label{fig:task3}
+\end{wrapfigure}
+
+$A$ и $B$ встречаются на интервале одного часа, который можно представить геометрически в виде рис. \ref{fig:task3}: 
+
+\begin{itemize}
+\item оси представляют время появления $A$ и $B$, соответственно,
+\item область $S$, окрашенная светло-жёлтым, обозначает то множество временных точек, когда $A$ и $B$ могут встретиться: данная область сформирована, исходя из условия, что разница времён прихода $A$ и $B$ не может превышать 20 минут для того, чтобы встреча состоялась,
+\item остальные две области за пределами $S$ обозначает то множество временных точек, когда A и B разминутся. 
+\end{itemize}
+
+Соответственно, отношение площади области S к общей площади (площади полной вероятности) и даст искомую вероятность встречи.
+
+Для удобства счёта примем стороны квадрата за 6, тогда площади областей за пределами $S$ - это будут площади двух прямоугольных треугольников с катетами, равными 4.
+
+\begin{align*}
+p = \frac{\text{Площадь фигуры}\ S}{\text{Полная площадь}} = \frac{6 \times 6 - 2\frac{1}{2}4 \times 4}{6 \times 6} = \frac{20}{36} = \frac{5}{9}.
+\end{align*}
+
+\subsection{Сложная задача}
+
+(не выполнена)
+
+% ------------------------------------------------------------------------------
+% Bibliography
+% Is that possible to make it as per ГОСТ Р7.05-2008?
+% ------------------------------------------------------------------------------
+%\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}

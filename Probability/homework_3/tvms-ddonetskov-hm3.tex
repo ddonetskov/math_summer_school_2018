@@ -1,0 +1,237 @@
+% !TEX TS-program = lualatex
+
+% required for TexXstudio, an alternative is to change the default bibliography tool 
+% in TeXstudio settings (Options > Configure TeXstudio > Build > Default Bibliography Tool)
+% !BIB TS-program = biber
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=20.00mm, right=15.00mm, top=20.00mm, bottom=20.00mm}
+
+% this is to get rid of 'Overfull \hbox...' errors
+\usepackage{microtype}
+
+% ------------------------------------------------------------------------------
+% Title
+% ------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}Теория вероятностей и математическая статистика \\
+Домашнее задание №3}
+\author{Дмитрий Донецков (ddonetskov@gmail.com)}
+\date{\today}
+
+% ------------------------------------------------------------------------------
+% LUA
+% ------------------------------------------------------------------------------
+
+% \usepackage{luacode}
+
+% ------------------------------------------------------------------------------
+% Graphics
+% ------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+
+% https://www.sharelatex.com/learn/Pgfplots_package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}\usepgfplotslibrary{fillbetween}
+
+\usepackage{wrapfig}
+
+% ------------------------------------------------------------------------------
+% Figures
+% ------------------------------------------------------------------------------
+
+\usepackage{subcaption}         % subcaptions in figures
+
+% ------------------------------------------------------------------------------
+% Tables
+% ------------------------------------------------------------------------------
+
+\usepackage{multirow}           % spanning columns across multiple rows
+\usepackage{makecell}           % allows different formats inside cells
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+% ------------------------------------------------------------------------------
+% Math (Additional Support)
+% ------------------------------------------------------------------------------
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}     % AMS
+\usepackage{cancel}             % four different modes of striking through
+\usepackage{dsfont}
+\usepackage{icomma}             % Smart comma: $0,2$ --- число, $0, 2$ --- перечисление
+\usepackage{nicefrac}
+\usepackage{physics}            % implementation of \abs and \norm
+
+\DeclareMathOperator*{\D}{\mathbb{D}}   % the dispersion symbol
+\DeclareMathOperator*{\E}{\mathbb{E}}   % the expectation symbol
+\DeclareMathOperator*{\N}{\mathbb{N}}   % the set of natural numbers
+\DeclareMathOperator*{\R}{\mathbb{R}}   % the set of real numbers
+\DeclareMathOperator*{\Z}{\mathbb{Z}}   % the set of integers
+
+% ------------------------------------------------------------------------------
+% Russian Language (support thereof)
+% ------------------------------------------------------------------------------
+
+\usepackage[russian,english]{babel}	    % локализация и переносы
+
+% ------------------------------------------------------------------------------
+% Fonts 
+% ------------------------------------------------------------------------------
+
+\usepackage{fontspec}           % required to load Open Type, True Type fonts
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+%\setmainfont{Linux Libertine O} % Libertine covers Latin, Hebrew, Greek, and Russian
+%\setmonofont{Courier New}
+
+\usepackage{euscript}	          % Шрифт Евклид
+\usepackage{mathrsfs}           % Красивый матшрифт
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% ------------------------------------------------------------------------------
+
+% Removed as it was not required.
+
+% ------------------------------------------------------------------------------
+% Bookmarking, citing, URL's
+% ------------------------------------------------------------------------------
+
+% hyperref usually needs to be loaded last
+\usepackage{hyperref}
+\usepackage{url}
+% \usepackage[dvipsnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=red,      
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\maketitle
+
+\section{Вопросы}
+
+\subsection{Вопрос 1}
+
+N.B. Данная задача решена с ошибкой.
+
+Случайным величинам $X \sim U[0,2\pi]$, $Y = g(X)$ соответствуют функции распределения:
+
+\begin{align*}
+  F_X(x) &=  P(X \leq x) = \frac{x}{2\pi} \\
+  F_Y(y) & = P(Y \leq y) = P(g(X) \leq y) = P(X \leq g^{-1}(y)), y \in [-1, 1].
+\end{align*}
+
+Если $g(x) = \sin x$, то $g^{-1}(y) = \asin x$. Для заданного интервала $y \in [-1, 1]$ такая обратная функция не существует в силу многозначности отображений из области определения в область значений. Но, если учитывать только главные значения функции $\asin$, с учётом того, что мера аргументов - вероятностная, то можно записать
+
+\begin{align*}
+  F_Y(y) & = 
+  \begin{cases}
+    0 & , y < -1 \\
+    P(\pi - \asin y \leq X \leq 2\pi + \asin y) = F_X(2\pi + \asin y) - F_X(\pi - \asin y) & , \text{если}\ y \in [-1, 0] \\
+    P(\asin y \leq X <     \pi - \asin y) = F_X( \pi - \asin y) - F_X(\asin y) & , \text{если}\ y \in ( 0, 1] \\
+    1 & , y > 1
+  \end{cases}
+  \\
+  & =
+  \begin{cases}
+    0 & , y < -1 \\
+    \frac{1}{2\pi}(2\pi + \asin y - \pi + \asin y)
+      = \frac{1}{2} + \frac{\asin y}{\pi} & , \text{если}\ y \in [-1, 0] \\
+    \frac{1}{2\pi}(\pi - \asin y - \asin y)
+      = \frac{1}{2} - \frac{\asin y}{\pi} & , \text{если}\ y \in ( 0, 1] \\
+    1 & , y > 1.
+  \end{cases}  
+\end{align*}
+
+В общем виде. Если известно, что $X \sim F_X(x), Y = g(X)$, то $F_Y(y)$ можно определить через $F_X(x)$ при условии, что существует обратная функция $g^{-1}(y)$. Если функция $g$ необратима в алгебраическом смысле, то следует исследовать как её можно обратить в смысле вероятностной меры. Интуитивно, такое обращение всегда можно подобрать.
+
+\subsection{Вопрос 2}
+
+В случае $X \sim Bin(n, p)$ можно задать такое малое $p$, что для подсчёта $P(X=k)$ использование нормального распределения (согласно теореме Муавра-Лапласа) будет \textit{малоприменимым} в силу малого значения $np$ (рекомендуется, чтобы оно было больше 5), а использование же распределения Пуассона будет \textit{применимым}, т.к. теорема Пуассона не накладывает подобных ограничений на нижний порог для $\lambda$. Так, например, для серии событий длиною $n = 1000$ с редким успешным событием вероятностью $p=0.001$: $np$ = 1, $\lambda = 1$.
+
+Исходя из вышеизложенного, распределение Пуассона более применимо для работы с редкими событиями, чем нормальное, отсюда, видимо, и такое название.
+
+\subsection{Вопрос 3}
+
+Для $X \sim \mathcal{N}(\mu,\,\sigma^{2})$:
+
+\begin{align*}
+P(a \leq X \leq b) = P(\frac{a-\mu}{\sigma} \leq \frac{X - \mu}{\sigma} \leq \frac{b-\mu}{\sigma})
+= \Phi_0(\frac{b-\mu}{\sigma}) - \Phi_0(\frac{a-\mu}{\sigma}).
+\end{align*}
+
+\subsection{Вопрос 4}
+
+\begin{align*}
+\begin{cases}
+  P(|X-\E[X]| < a) = 1 - P(|X-\E[X]| > a), \\
+  P(|X-\E[X]| > a) \leq \frac{\D[X]}{a^2}
+\end{cases}
+\Rightarrow
+P(|X-\E[X]| < a) \geq 1 - \frac{\D[X]}{a^2}.
+\end{align*}
+
+\section{Задачи}
+
+\subsection{Задача 1}
+
+Обозначим за $X$ время спуска лыжника. По условию задачи $X \sim \mathcal{N}(\mu = 12.3,\,\sigma^{2} = 0.4^2)$. Тогда:
+
+\begin{align*}
+P(12.1 \leq X \leq 12.5) 
+& = P(\frac{12.1-\mu}{\sigma} \leq \frac{X - \mu}{\sigma} \leq \frac{12.5-\mu}{\sigma}) \\
+& = P(\frac{12.1-12.3}{0.4} \leq \frac{X - 12.3}{0.4} \leq \frac{12.5-12.3}{0.4}) \\
+& = P(-0.5 \leq \frac{X - 12.3}{0.4} \leq 0.5) = \Phi_0(0.5) - \Phi_0(-0.5) \\
+& = 0.69146 - 0.30853 = 0.38293.
+\end{align*}
+
+\subsection{Задача 2}
+
+Обозначим за $X$ количество бракованных свечей. По условию задачи $X \sim Bin(p = 0.01)$.
+
+\medskip
+
+Для нахождения $P(X \leq 1)$ в соответствии с теоремой Пуассона, следует задаться параметром $\lambda$, который выражает частоту повторения исследуемого события. Для партии $n = 25$ и $p = 0.01$, частота $\lambda$ составит $\lambda = pn = 0.25$. Тогда,
+
+\begin{align*}
+P(X \leq 1) = P(X=0) + P(X=1) = \sum_{k=0}^{1}\frac{\lambda^k}{k!}e^{-\lambda}
+= e^{-\lambda}\sum_{k=0}^{1}\frac{\lambda^k}{k!} = e^{-0.25}(1 + -0.25) \approx 0.58.
+\end{align*}
+
+\medskip
+
+Для второго случая, где $n = 1000$, $P(X = 20)$ согласно теореме Муавра-Лапласа ($\mu = 10, \sigma = 9.9)$:
+
+\begin{align*}
+P(X = 20) & = P(19 < X < 21) = |\text{переход к нормальному распределению с учётом поправки}\ \frac{1}{2}| \\ 
+& = P(19.5 \leq X \leq 20.5) = P(\frac{19.5-10}{9.9} < \frac{X-10}{9.9} < \frac{20.5-10}{9.9}) \\
+& = \Phi_0(1.06) - \Phi_0(0.96) = 0.85543 - 0.83147 \approx 2.4\%.
+\end{align*}
+
+\subsection{Сложная задача}
+
+(не выполнена)
+
+% ------------------------------------------------------------------------------
+% Bibliography
+% Is that possible to make it as per ГОСТ Р7.05-2008?
+% ------------------------------------------------------------------------------
+%\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}

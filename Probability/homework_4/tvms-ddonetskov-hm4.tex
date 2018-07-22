@@ -1,0 +1,249 @@
+% !TEX TS-program = lualatex
+
+% required for TexXstudio, an alternative is to change the default bibliography tool 
+% in TeXstudio settings (Options > Configure TeXstudio > Build > Default Bibliography Tool)
+% !BIB TS-program = biber
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=20.00mm, right=15.00mm, top=20.00mm, bottom=20.00mm}
+
+% this is to get rid of 'Overfull \hbox...' errors
+\usepackage{microtype}
+
+% ------------------------------------------------------------------------------
+% Title
+% ------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}Теория вероятностей и математическая статистика \\
+Домашнее задание №4}
+\author{Дмитрий Донецков (ddonetskov@gmail.com)}
+\date{\today}
+
+% ------------------------------------------------------------------------------
+% LUA
+% ------------------------------------------------------------------------------
+
+% \usepackage{luacode}
+
+% ------------------------------------------------------------------------------
+% Graphics
+% ------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+
+% https://www.sharelatex.com/learn/Pgfplots_package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}\usepgfplotslibrary{fillbetween}
+
+\usepackage{wrapfig}
+
+% ------------------------------------------------------------------------------
+% Figures
+% ------------------------------------------------------------------------------
+
+\usepackage{subcaption}         % subcaptions in figures
+
+% ------------------------------------------------------------------------------
+% Tables
+% ------------------------------------------------------------------------------
+
+\usepackage{multirow}           % spanning columns across multiple rows
+\usepackage{makecell}           % allows different formats inside cells
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+% ------------------------------------------------------------------------------
+% Math (Additional Support)
+% ------------------------------------------------------------------------------
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}     % AMS
+\usepackage{cancel}             % four different modes of striking through
+\usepackage{dsfont}
+\usepackage{icomma}             % Smart comma: $0,2$ --- число, $0, 2$ --- перечисление
+\usepackage{nicefrac}
+\usepackage{physics}            % implementation of \abs and \norm
+
+\DeclareMathOperator*{\D}{\mathbb{D}}   % the dispersion symbol
+\DeclareMathOperator*{\E}{\mathbb{E}}   % the expectation symbol
+\DeclareMathOperator*{\N}{\mathbb{N}}   % the set of natural numbers
+\DeclareMathOperator*{\R}{\mathbb{R}}   % the set of real numbers
+\DeclareMathOperator*{\Z}{\mathbb{Z}}   % the set of integers
+
+% ------------------------------------------------------------------------------
+% Russian Language (support thereof)
+% ------------------------------------------------------------------------------
+
+\usepackage[russian,english]{babel}	    % локализация и переносы
+
+% ------------------------------------------------------------------------------
+% Fonts 
+% ------------------------------------------------------------------------------
+
+\usepackage{fontspec}           % required to load Open Type, True Type fonts
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+%\setmainfont{Linux Libertine O} % Libertine covers Latin, Hebrew, Greek, and Russian
+%\setmonofont{Courier New}
+
+\usepackage{euscript}	          % Шрифт Евклид
+\usepackage{mathrsfs}           % Красивый матшрифт
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% ------------------------------------------------------------------------------
+
+% Removed as it was not required.
+
+% ------------------------------------------------------------------------------
+% Bookmarking, citing, URL's
+% ------------------------------------------------------------------------------
+
+% hyperref usually needs to be loaded last
+\usepackage{hyperref}
+\usepackage{url}
+% \usepackage[dvipsnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=red,      
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\maketitle
+
+\section{Задачи}
+
+\subsection{Задача 1}
+
+Рассмотрим $X \sim Bin(n, p)$, как сумму случайных величин Бернулли $X_i, i \in [1,n]$. Тогда производящая функция моментов для $X$:
+
+\begin{align*}
+\begin{cases}
+  M_X(t) & = \prod_{i=1}^{n} M_{X_i}(t) = \prod_{i=1}^{n} \E[e^{tX_i}] = (\E[e^{tX_1}])^n, \\
+  E[e^{tX_1}] & = e^{t \times 0}q + e^{t \times 1}p = q + pe^t, \\
+  q & = 1 -p.
+\end{cases}
+\Rightarrow
+\boxed{M_X(t) = (q + pe^t)^n}.
+\end{align*}
+
+Третий момент $\mu_3 = M^{(3)}_X(t)$:
+
+\begin{align*}
+M^{(1)}_X(t) & = [(q + pe^t)^n]' = pe^tn(q+pe^t)^{n-1},\\
+  & \Rightarrow
+  \mu_1 = M^{(1)}_X(0) = p1^nn(q+p1)^{n-1} = \boxed{pn}, \\
+M^{(2)}_X(t) & = [M^{(1)}_X(t)]' = [pe^tn(q+pe^t)^{n-1}]' = pe^tn(q+pe^t)^{n-1} + pe^tn(n-1)pe^t(q+pe^t)^{n-2}\\
+& = npe^t(q+pe^t)^{n-1} + n(n-1)[pe^t]^2((q+pe^t)^{n-2} \\
+  & \Rightarrow
+  \mu_2 = M^{(2)}_X(0) = np(1+p(n-1)) = \boxed{np(q+np)}.\\
+\end{align*}
+
+Нахождение $M^{(3)}_X(t)$ уже представляется делом громоздким, поэтому введём вспомогательную функцию:
+
+\begin{align*}
+z_t(k) = pe^t(q+pe^t)^k, k \in [0\cup\N].
+\end{align*}
+
+Тогда,
+
+\begin{align*}
+M^{(2)}_X(t) & = nz_t(k-1) + n(n-1)pe^tz_t(k-2), \\
+M^{(3)}_X(t) & = nz'_t(k-1) + n(n-1)[pe^tz_t(k-2) + pe^tz'_t(k-2)] \\
+ &= nz'_t(k-1) + n(n-1)pe^t[z_t(k-2) + z'_t(k-2)]. \\
+\end{align*}
+
+Так как для вычисления $\mu_3$ нам понадобится значение производящей функции в точке 0, то найдём значения $z_t(k-2)$, $z'_t(k-1)$, $z'_t(k-2)$ в нуле:
+
+\begin{align*}
+z_t(k)|_{t=0} & = p(q+p) = p, k \in [0\cup\N]. \\
+z'_t(k) & = \frac{dz}{dt}[pe^t(q+pe^t)^k] = pe^t(q+pe^t)^k +[pe^t]^2k(q+pe^t)^{k-1} \\
+& = pe^t(q+pe^t)^{k-1}(q+pe^t + pe^tk) = pe^t(q+pe^t)^{k-1}(q+(k+1)pe^t) \\
+& = z_t(k)(q+(k+1)pe^t), \\
+z'_t(k-1)|_{t=0} & = z_t(k-1)(q+(k-1+1)pe^t)|_{t=0} = p(q+kp), \\
+z'_t(k-2)|_{t=0} & = z_t(k-2)(q+(k-2+1)pe^t)|_{t=0} = p(q+(k-1)p) = p(q + kp - p).
+\end{align*}
+
+Тогда
+
+\begin{align*} 
+\mu_3 & = M^{(3)}_X(0) = [nz'_t(k-1) + n(n-1)pe^t[z_t(k-2) + z'_t(k-2)]]|_{t=0} \\
+& = n(p(q+np)) + n(n-1)p[p + p(q + np-p)] \\
+& = np(q+np+(n-1)p(1+q+np-p)) \\
+& = np(1-p+np+p(n-1)(2+np-2p)) \\
+& = np(1-p+np+2np+n^2p^2-2np^2-2p-np^2+2p^2) \\
+& = \boxed{np(1-3p+3np+n^2p^2-3np^2+2p^2)}.
+\end{align*}
+
+\subsection{Задача 2}
+
+Пусть $X_1$ - появление 5 или 6 при одном выбросе кубика, тогда
+
+\begin{itemize}
+\item $X_1 \sim Bern(\frac{1}{3})$,
+\item сумму реализаций $X_1$ при повторении эксперимента $n$ раз можно представить, как случайную величину $X$: $X \sim Bin(n, p)$, где $n = 120$, $p = \frac{1}{3}$,
+\item $\E[X] = np = 120\frac{1}{3} = 40$,
+\item $\D[X] = npq = 120\frac{1}{3}\frac{2}{3} \approx 26.6$,
+\item интервал от 30 до 50 для реализации $X$ в серии выбросов даёт нам возможность определить максимальную разность, как $|X - \E[X]| = 10$.
+\end{itemize}
+
+Согласно неравенству Чебышева:
+
+\begin{align*}
+P(|X - \E[X]| & \leq 10) = 1 - P(|X - \E[X]| > 10), \\
+P(|X - \E[X]| & > 10) \leq \frac{\D[X]}{10^2} = \frac{26.6}{100} \approx 0.26 \\
+\Rightarrow P(|X - \E[X]| & \leq 10) > 1 - 0.26 = \boxed{0.74}.
+\end{align*}
+
+Обозначим через $S_n$ сумму реализаций $X_1$. Тогда, согласно центральной предельной теореме (ЦПТ):
+
+\begin{align*}
+S_n-n\mu \sim \frac{\sigma}{\sqrt{n}} \mathcal{N}(0, 1), n\mu = 40, \sigma = \sqrt{pq} = \frac{\sqrt{2}}{3}.
+\end{align*}
+
+\begin{align*}
+P(30 \leq S_n \leq 50) & = \Phi_0(\frac{50 - 40}{\frac{\sqrt{2}}{3}\sqrt{120}}) - \Phi_0(\frac{30 - 40}{\frac{\sqrt{2}}{3}\sqrt{120}}) \\
+& = \Phi_0(1.94) - \Phi_0(-1.94) = 0.97381 - 0.02619 \approx \boxed{0.95}.
+\end{align*}
+
+Здесь, стоит отметить, что вычисления по сути получаются такими же, как и при применении теоремы Муавра-Лапласа, т.к. последняя является частным случаем ЦПТ. Другими словами, для решения задачи мы могли бы перейти от рассмотрения применения ЦПТ для $X_1$ к рассмотрению применения теоремы Муавра-Лапласа для $X$.
+
+\subsection{Задача 3}
+
+Т.к. веса и их стандартные отклонения случайно выбранных арбуза и дыни - независимые случайные величины, то общий вес $X$ арбуза и дыни будет иметь среднее значение $\E[X] = 4 + 10 = 14$ (кг), а его стандартное отклонение будет $\sigma = \sqrt{\D[X]} \approx 4.12$ (кг), где $\D[X] = 1^2 + 4^2 = 17$ (кг).
+
+\subsection{Задача 4}
+
+Обозначим: $X$ - вес яблока, $X \sim \mathcal{N}(\mu = 95, \sigma^2 = 15^2)$, $S_n$ - общий вес $n$ яблок, $n$ = 10. Необходимо найти $P(S_n > 1000) = 1 - P(S_n < 1000)$. Тогда, согласно центральной предельной теореме:
+
+\begin{align*}
+P(S_n < 1000) & = P(\frac{S_n - n\mu}{\sigma\sqrt{n}} < \frac{1000 - n\mu}{\sigma\sqrt{n}}) 
+= \Phi_0(\frac{1000 - 10*95}{15\sqrt{10}}) \approx 0.85314 \\
+\Rightarrow 
+P(S_n > 1000) & = 1 - 0.85314 = \boxed{0.14686}.
+\end{align*}
+
+\subsection{Сложная задача}
+
+(не выполнена)
+
+% ------------------------------------------------------------------------------
+% Bibliography
+% Is that possible to make it as per ГОСТ Р7.05-2008?
+% ------------------------------------------------------------------------------
+%\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}
