@@ -1,0 +1,176 @@
+% !TEX TS-program = lualatex
+
+% required for TexXstudio, an alternative is to change the default bibliography tool 
+% in TeXstudio settings (Options > Configure TeXstudio > Build > Default Bibliography Tool)
+% !BIB TS-program = biber
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=20.00mm, right=15.00mm, top=20.00mm, bottom=20.00mm}
+
+% this is to get rid of 'Overfull \hbox...' errors
+\usepackage{microtype}
+
+% ------------------------------------------------------------------------------
+% Title
+% ------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}Теория вероятностей и математическая статистика \\
+Домашнее задание №6}
+\author{Дмитрий Донецков (ddonetskov@gmail.com)}
+\date{\today}
+
+% ------------------------------------------------------------------------------
+% LUA
+% ------------------------------------------------------------------------------
+
+% \usepackage{luacode}
+
+% ------------------------------------------------------------------------------
+% Graphics
+% ------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+
+% https://www.sharelatex.com/learn/Pgfplots_package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}\usepgfplotslibrary{fillbetween}
+
+\usepackage{wrapfig}
+
+% ------------------------------------------------------------------------------
+% Figures
+% ------------------------------------------------------------------------------
+
+\usepackage{subcaption}         % subcaptions in figures
+
+% ------------------------------------------------------------------------------
+% Tables
+% ------------------------------------------------------------------------------
+
+\usepackage{multirow}           % spanning columns across multiple rows
+\usepackage{makecell}           % allows different formats inside cells
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+% ------------------------------------------------------------------------------
+% Math (Additional Support)
+% ------------------------------------------------------------------------------
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}     % AMS
+\usepackage{cancel}             % four different modes of striking through
+\usepackage{dsfont}
+\usepackage{icomma}             % Smart comma: $0,2$ --- число, $0, 2$ --- перечисление
+%\usepackage{nicefrac}          % looks like xfrac is better maintained
+\usepackage{physics}            % implementation of \abs and \norm
+\usepackage{xfrac}
+
+\DeclareMathOperator*{\D}{\mathbb{D}}   % the dispersion symbol
+\DeclareMathOperator*{\E}{\mathbb{E}}   % the expectation symbol
+\DeclareMathOperator*{\N}{\mathbb{N}}   % the set of natural numbers
+\DeclareMathOperator*{\R}{\mathbb{R}}   % the set of real numbers
+\DeclareMathOperator*{\Z}{\mathbb{Z}}   % the set of integers
+
+% e = 2.71...
+\newcommand{\e}{\mathrm{e}}
+
+% sign of independence
+% \vDash can also be used instead of \models
+% \raisebox{}{} is required for vertical alignment
+\newcommand{\independent}{\raisebox{0.05em}{\rotatebox[origin=c]{90}{$\models$}}}
+
+%\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+%\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+% ------------------------------------------------------------------------------
+% Russian Language (support thereof)
+% ------------------------------------------------------------------------------
+
+\usepackage[russian,english]{babel}	    % локализация и переносы
+
+% ------------------------------------------------------------------------------
+% Fonts 
+% ------------------------------------------------------------------------------
+
+\usepackage{fontspec}           % required to load Open Type, True Type fonts
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+%\setmainfont{Linux Libertine O} % Libertine covers Latin, Hebrew, Greek, and Russian
+%\setmonofont{Courier New}
+
+\usepackage{euscript}	          % Шрифт Евклид
+\usepackage{mathrsfs}           % Красивый матшрифт
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% ------------------------------------------------------------------------------
+
+% Removed as it was not required.
+
+% ------------------------------------------------------------------------------
+% Bookmarking, citing, URL's
+% ------------------------------------------------------------------------------
+
+% hyperref usually needs to be loaded last
+\usepackage{hyperref}
+\usepackage{url}
+% \usepackage[dvipsnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=red,      
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\maketitle
+
+\section{Задачи}
+
+\subsection{Задача 1}
+
+Точное значение указанной площади, как четверти площади внутри единичной окружности, составляет $\frac{\pi}{4}$. Данное значение можно вычислить и аналитически:
+
+\begin{align*}
+\int_{0}^{1} \sqrt{1^2 - x^2}dx 
+= \bigg[\frac{x}{2}\sqrt{1-x^2} + \frac{1}{2}\arcsin{x} + C\bigg]\bigg\rvert_0^1
+= \frac{1}{2}(\arcsin{1} - \arcsin{0}) = \frac{\pi}{4}.
+\end{align*}
+
+Для вычисления интеграла функции $\hat{I}_n$ по методу Монте-Карла есть следующая оценка погрешности приближения к истинному значению $I$ (с вероятностью $\approx$ 0.997):
+
+\begin{align*}
+|\hat{I}_n - I| \leq \frac{3\sigma}{\sqrt{n}}
+\Rightarrow
+n \leq \bigg[\frac{3\sigma}{|\hat{I}_n - I|}\bigg]^2.
+\end{align*}
+
+Вычислим $\sigma$ для $Y = \sqrt{1-X^2}$, где $X \sim U[0,1], \E[X] = \frac{1}{2}, \D[X] = \frac{1}{12}$:
+
+\begin{align*}
+\sigma^2 &= \D[Y] = \E[Y^2] - [\E[Y]^2] = \E[1-X^2] - (\frac{\pi}{4})^2 \\
+&= 1 - \E[X^2] - \frac{\pi^2}{16} = 1 - (\D[X] + (\E[X]^2) - \frac{\pi^2}{16} \\
+&= 1 - (\frac{1}{12} + \frac{1}{4}) - \frac{\pi^2}{16} = \frac{2}{3} - \frac{\pi^2}{16}.
+\end{align*}
+
+Тогда, для достижения требуемой точности при заданной вероятности $n$ ограниченно сверху:
+
+\begin{align*}
+n \leq \bigg[\frac{2-\frac{3\pi^2}{16}}{0.001}\bigg]^2 \Rightarrow
+n \leq \approx 22335.
+\end{align*}
+
+Т.е. $n$ должно быть равным \approx 22335, чтобы в долгосрочной серии экспериментов по вычислению интеграла заданной функции по методу Монте-Карла получить истинное значение с точностью 0.001 и с вероятностью 0.997.
+
+\end{document}

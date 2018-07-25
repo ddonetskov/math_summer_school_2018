@@ -1,0 +1,206 @@
+% !TEX TS-program = lualatex
+
+% required for TexXstudio, an alternative is to change the default bibliography tool 
+% in TeXstudio settings (Options > Configure TeXstudio > Build > Default Bibliography Tool)
+% !BIB TS-program = biber
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{geometry}
+\geometry{left=20.00mm, right=15.00mm, top=20.00mm, bottom=20.00mm}
+
+% this is to get rid of 'Overfull \hbox...' errors
+\usepackage{microtype}
+
+% ------------------------------------------------------------------------------
+% Title
+% ------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}Теория вероятностей и математическая статистика \\
+Домашнее задание №5}
+\author{Дмитрий Донецков (ddonetskov@gmail.com)}
+\date{\today}
+
+% ------------------------------------------------------------------------------
+% LUA
+% ------------------------------------------------------------------------------
+
+% \usepackage{luacode}
+
+% ------------------------------------------------------------------------------
+% Graphics
+% ------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+
+% https://www.sharelatex.com/learn/Pgfplots_package
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}\usepgfplotslibrary{fillbetween}
+
+\usepackage{wrapfig}
+
+% ------------------------------------------------------------------------------
+% Figures
+% ------------------------------------------------------------------------------
+
+\usepackage{subcaption}         % subcaptions in figures
+
+% ------------------------------------------------------------------------------
+% Tables
+% ------------------------------------------------------------------------------
+
+\usepackage{multirow}           % spanning columns across multiple rows
+\usepackage{makecell}           % allows different formats inside cells
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+% ------------------------------------------------------------------------------
+% Math (Additional Support)
+% ------------------------------------------------------------------------------
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}     % AMS
+\usepackage{cancel}             % four different modes of striking through
+\usepackage{dsfont}
+\usepackage{icomma}             % Smart comma: $0,2$ --- число, $0, 2$ --- перечисление
+%\usepackage{nicefrac}          % looks like xfrac is better maintained
+\usepackage{physics}            % implementation of \abs and \norm
+\usepackage{xfrac}
+
+\DeclareMathOperator*{\D}{\mathbb{D}}   % the dispersion symbol
+\DeclareMathOperator*{\E}{\mathbb{E}}   % the expectation symbol
+\DeclareMathOperator*{\N}{\mathbb{N}}   % the set of natural numbers
+\DeclareMathOperator*{\R}{\mathbb{R}}   % the set of real numbers
+\DeclareMathOperator*{\Z}{\mathbb{Z}}   % the set of integers
+
+% e = 2.71...
+\newcommand{\e}{\mathrm{e}}
+
+% sign of independence
+% \vDash can also be used instead of \models
+% \raisebox{}{} is required for vertical alignment
+\newcommand{\independent}{\raisebox{0.05em}{\rotatebox[origin=c]{90}{$\models$}}}
+
+%\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+%\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+% ------------------------------------------------------------------------------
+% Russian Language (support thereof)
+% ------------------------------------------------------------------------------
+
+\usepackage[russian,english]{babel}	    % локализация и переносы
+
+% ------------------------------------------------------------------------------
+% Fonts 
+% ------------------------------------------------------------------------------
+
+\usepackage{fontspec}           % required to load Open Type, True Type fonts
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+%\setmainfont{Linux Libertine O} % Libertine covers Latin, Hebrew, Greek, and Russian
+%\setmonofont{Courier New}
+
+\usepackage{euscript}	          % Шрифт Евклид
+\usepackage{mathrsfs}           % Красивый матшрифт
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% ------------------------------------------------------------------------------
+
+% Removed as it was not required.
+
+% ------------------------------------------------------------------------------
+% Bookmarking, citing, URL's
+% ------------------------------------------------------------------------------
+
+% hyperref usually needs to be loaded last
+\usepackage{hyperref}
+\usepackage{url}
+% \usepackage[dvipsnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=red,      
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\maketitle
+
+\section{Задачи}
+
+Дано: $X \sim U[0,2], Y \sim U[1,3], X \independent Y.$ Укажем функции распределения $X$, $Y$ и функции плотности распределения $X$, $Y$:
+
+\begin{align*}
+F_X(x) & = 
+\begin{cases}
+  0,   & x < 0, \\
+  \frac{x}{2}, & x \in [0,2], \\
+  1,   & x > 2.
+\end{cases}
+\hspace{2cm}
+f_X(x) = 
+\begin{cases}
+0, & x \notin [0,2] \\
+\frac{1}{2}, & x \in [0,2].
+\end{cases}
+\\
+F_Y(y) & = 
+\begin{cases}
+0,   & y < 1, \\
+\frac{y-1}{2}, & y \in [1,3], \\
+1,   & y > 3.
+\end{cases}
+\hspace{1.7cm}
+f_Y(y) = 
+\begin{cases}
+0,   & y \notin [1,3], \\
+\frac{1}{2}, & y \in [1,3].
+\end{cases}
+\end{align*}
+
+\begin{align*}
+1
+\end{align*}
+
+\subsection{Задача 1}
+
+Т.к. $X$, $Y$ - \textit{независимые} случайные величины, то функция их совместного распределения - это произведение их функций распределения 
+
+\begin{align*}
+F(x, y) & = P(X \leq x, Y \leq y) = P(X \leq x) (P(Y \leq y) = F_X(x) F_Y(y) \\
+\Rightarrow
+F(x, y) & =
+\begin{cases}
+\frac{x(y-1)}{4}, & x \in [0,2], y \in [2,3], \\
+1,   & x > 2, y > 3, \\
+0,   & \text{во всех остальных случаях}.
+\end{cases}
+\end{align*}
+
+\subsection{Задача 2}
+
+\begin{align*}
+\frac{\partial^2}{\partial x \partial y}F(x,y) 
+= \frac{\partial^2}{\partial x \partial y}\frac{x(y-1)}{4}
+= \frac{\partial}{\partial y}\frac{y-1}{4} = \frac{1}{4}.
+\end{align*}
+
+\subsection{Задача 3}
+
+\begin{align*}
+F_{X+Y}(t) & = P(X+Y \leq t) = P(Y \leq t - X)  = P(Y \leq t - x | X = x) \\
+\Rightarrow 
+F_{X+Y}(t) & = \int_{-\infty}^{+\infty} F_Y(t-x)f_X(x)dx
+\end{align*}
+
+\end{document}
