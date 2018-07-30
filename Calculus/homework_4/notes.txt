@@ -1,0 +1,43 @@
+\begin{figure}[h!]
+  \begin{center}
+  	\begin{tikzpicture}
+  	\begin{axis}
+  	  [
+	  	% only scale the axis, not the axis including the ticks and labels
+	  	scale only axis=true,
+	  	axis lines=middle,
+	  	samples=100,
+	  	% set `width' and `height' to the desired values
+	  	width=6cm,
+	    height=6cm,
+	  	xlabel = $x$,
+	  	ylabel = $y$,
+	  	xmin=0, xmax=2,
+	  	ymin=0, ymax=2,
+	  	%xtick={0,10,20,30,40,50,60}, 
+	  	%ytick={0,0.5,1},
+	  	%xmajorgrids=true,
+	  	%ymajorgrids=true,
+	  	%grid style=dashed,
+	  	axis on top
+  	  ]
+      \addplot +[
+        name path=L1,
+        color=orange,
+        line width=2pt] 
+        coordinates {(1, -2) (1, 5)};
+      \addlegendentry{$x = 1$}
+  	  \addplot [
+  	    name path=L2,
+  		domain=0:2, 
+  		color=red,
+  		line width=2pt
+  	  ] {sqrt(2*x)};
+  	  \addlegendentry{$y^2 = 2x$} 
+  	  \node at (axis cs:0.5,0.5) {$S$};
+  	\end{axis}
+  	\end{tikzpicture}
+  \end{center}
+  \caption{Площадь заданная функциями}
+  \label{fig:task4}
+\end{figure}
